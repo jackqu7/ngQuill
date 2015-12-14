@@ -236,15 +236,10 @@
                        $scope.$emit('editorCreated', editor);
                     });
 
-                    // set initial value
-                    $scope.$watch(function () {
-                        return $scope.ngModel;
-                    }, function (newText) {
-                        if (newText !== undefined && !changed) {
-                            // Set initial value;
-                            editor.setHTML(newText);
-                        }
-                    });
+                    // When ngModel detects a change, update it in quill
+                    ngModel.$render = function() {
+                      editor.setHTML(ngModel.$viewValue);
+                    };
 
                     // toggle readOnly
                     if ($scope.readOnly) {
